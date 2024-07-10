@@ -1,0 +1,130 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+<div class="center">
+  <label class="inputTitle" for="urlInput"> Adicionar Website</label>
+  <md-outlined-text-field class="urlInput" name="url" label="URL" supporting-text="https://www.example.com" #websiteUrl
+    (keyup)="onUrlChange($event)" (keyup.enter)="add(websiteUrl.value)">
+  </md-outlined-text-field>
+
+  <md-filled-tonal-button class="send" (click)="add(websiteUrl.value);" style="margin-top: 23px;">
+    Enviar
+    <svg slot="icon" viewBox="0 0 48 48">
+      <path d="M6 40V8l38 16Zm3-4.65L36.2 24 9 12.5v8.4L21.1 24 9 27Zm0 0V12.5 27Z" />
+    </svg>
+  </md-filled-tonal-button>
+
+  <div class="error-message" *ngIf="!addResult">
+    <span class="error-message">❗Error: Adicione o URL seguindo o formato indicado</span>
+  </div>
+
+</div>
+
+
+<div class="filter-sort-container">
+
+  <div class="ordena">
+    <span style="font-size:large;">Ordenar </span>
+    <md-filled-tonal-button *ngIf="ascendenteRegisto" style="margin-left:3%" class="confirm"
+      [class.selected]="selectedOrdenar === true" (click)="ordenaDataRegisto(true)">Data de Registo
+      ↑</md-filled-tonal-button>
+    <md-filled-tonal-button *ngIf="!ascendenteRegisto" style="margin-left:3%" class="confirm"
+      [class.selected]="selectedOrdenar === true" (click)="ordenaDataRegisto(true)">Data de Registo
+      ↓</md-filled-tonal-button>
+    <md-filled-tonal-button *ngIf="ascendenteAval" class="confirm" [class.selected]="selectedOrdenar === false"
+      (click)="ordenaDataUltAval(true)">Data da Última Avaliação ↑</md-filled-tonal-button>
+    <md-filled-tonal-button *ngIf="!ascendenteAval" class="confirm" [class.selected]="selectedOrdenar === false"
+      (click)="ordenaDataUltAval(true)">Data da Última Avaliação ↓</md-filled-tonal-button>
+  </div>
+
+  <div class="filtra">
+    <span style="font-size:larger; margin-left:5%; margin-right:1%;">Filtrar </span>
+    <md-filled-tonal-button *ngFor="let estado of estados"
+      class="filter" [class.selected]="selectedFilters.includes(estado)"
+      (click)="toggleFilter(estado)">{{ estado }}</md-filled-tonal-button>
+  </div>
+  
+
+</div>
+
+<div class="listaWebsites">
+  <md-list class="websites">
+
+    <md-list class="item-list" *ngIf="!filtrada">
+
+      <md-list-item class="item" type="button" [routerLink]="['/website', website?.url]"
+        *ngFor="let website of websitesList">
+        {{ website?.url }}
+
+        <md-filled-tonal-button *ngIf="website.pages.length > 0" class="search-button"
+          (click)="iniciarAvaliacao($event, website)">
+
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <span class="material-symbols-outlined" style="padding-right: 8px;">
+              pageview
+            </span>
+            Iniciar Avaliação
+          </div>
+
+        </md-filled-tonal-button>
+
+        <md-filled-tonal-button class="x-button" (click)="deleteWebsite(website, $event)">
+          <span class="material-symbols-outlined">
+            delete
+          </span>
+        </md-filled-tonal-button>
+
+        <div slot="supporting-text">Data de registo: {{ formataData(website.dataRegisto)}}</div>
+        <div slot="supporting-text">Data de avaliação: {{ formataData(website.dataAval) }}</div>
+        <div slot="supporting-text">Estado de monitorização: {{ website.estado }}</div>
+
+      </md-list-item>
+    </md-list>
+
+    <md-list *ngIf="filtrada">
+      <md-list-item class="item" type="button" [routerLink]="['/website', website?.url]"
+        *ngFor="let website of listaFiltrada">
+        {{ website?.url }}
+
+        <md-filled-tonal-button *ngIf="website.pages.length > 0" class="search-button"
+          (click)="iniciarAvaliacao($event, website)">
+
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <span class="material-symbols-outlined" style="padding-right: 8px;">
+              pageview
+            </span>
+            Iniciar Avaliação
+          </div>
+
+        </md-filled-tonal-button>
+
+        <md-filled-tonal-button class="x-button" (click)="deleteWebsite(website, $event)">
+          <span class="material-symbols-outlined">
+            delete
+          </span>
+        </md-filled-tonal-button>
+
+        <div slot="supporting-text">Data de registo: {{ formataData(website.dataRegisto)}}</div>
+        <div slot="supporting-text">Data de avaliação: {{ formataData(website.dataAval) }}</div>
+        <div slot="supporting-text">Estado de monitorização: {{ website.estado }}</div>
+
+      </md-list-item>
+    </md-list>
+
+  </md-list>
+</div>
+
+<md-dialog id="my-dialog" class="dialog">
+  <div slot="headline">Iniciar Avaliação de {{currentWebsite?.url}}</div>
+  <form id="form" slot="content" method="dialog">
+    <md-list-item class="item-dialog" [class.selected]="isSelected(page)" type="button"
+      *ngFor="let page of currentPagesList" (click)="toggleSelection(page)">
+      {{ page?.url }}</md-list-item>
+  </form>
+  <div slot="actions">
+    <md-text-button class="option" form="form" value="cancel" (click)="cancel()">Cancel</md-text-button>
+    <md-text-button class="option" *ngIf="selectedPages.length > 0" form="form" autofocus value="ok"
+      (click)="submitPages()">OK</md-text-button>
+  </div>
+</md-dialog>

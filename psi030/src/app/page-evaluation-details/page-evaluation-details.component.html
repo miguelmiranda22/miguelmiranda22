@@ -1,0 +1,133 @@
+<h2 class="inputTitle"> Detalhes Avaliação da Página</h2>
+
+<div class="parametros">
+    <div class="back">
+        <md-fab (click)="goBack()" style="margin-top: 23px;">
+            <md-icon slot="icon" style="font-size: xx-large;">
+                < </md-icon>
+        </md-fab>
+    </div>
+</div>
+
+<div class="container">
+    <div class="urlDetails">
+        <md-list>
+
+            <md-list-item>
+                <strong>URL: </strong> {{ displayUrl() }}
+            </md-list-item>
+
+            <md-divider></md-divider>
+
+            <md-list-item>
+                <strong>Total de testes passados:</strong> {{ getNumPassed() }} ({{ (getNumPassed() / totalTests *
+                100).toFixed(2) }}%)
+            </md-list-item>
+
+            <md-list-item>
+                <strong>Total de testes com aviso:</strong> {{ getNumWarning() }} ({{ (getNumWarning() / totalTests *
+                100).toFixed(2) }}%)
+            </md-list-item>
+
+            <md-list-item>
+                <strong>Total de testes falhados:</strong> {{ getNumFailed() }} ({{ (getNumFailed() / totalTests *
+                100).toFixed(2) }}%)
+            </md-list-item>
+
+            <md-list-item>
+                <strong>Total de testes não aplicáveis:</strong> {{ getNumInapplicable() }} ({{ (getNumInapplicable() /
+                totalTests * 100).toFixed(2) }}%)
+            </md-list-item>
+
+        </md-list>
+
+    </div>
+
+    <div class="filtra">
+        
+        <h4 id="filtrar">Filtrar </h4>
+
+        <div class="filterType">
+            <span style="font-size:larger; margin-right:1%;"> Tipo </span>
+            <md-filled-tonal-button *ngFor="let tipo of tipos" class="filter"
+                [class.selected]="selectedFiltersTipo.includes(tipo)" (click)="toggleFilterTipo(tipo)">{{ tipo
+                }}</md-filled-tonal-button>
+        </div>
+
+        <div class="filterType">
+            <span style="font-size:larger; margin-right:1%;"> Resultado </span>
+            <md-filled-tonal-button *ngFor="let resultado of resultados" class="filter"
+                [class.selected]="selectedFiltersResultado.includes(resultado)"
+                (click)="toggleFilterResultado(resultado)">{{ resultado }}</md-filled-tonal-button>
+        </div>
+
+        <div class="filterType">
+            <span style="font-size:larger; margin-right:1%;"> Nível de conformidade </span>
+            <md-filled-tonal-button *ngFor="let nivel of niveis" class="filter"
+                [class.selected]="selectedFiltersNivel.includes(nivel)" (click)="toggleFilterNivel(nivel)">{{ nivel
+                }}</md-filled-tonal-button>
+        </div>
+    </div>
+
+</div>
+
+<div class="listaTestes">
+    <md-list class="testes">
+
+        <md-list class="item-list" *ngIf="!filtrada">
+
+            <md-list-item class="item" type="button" *ngFor="let test of testsList">
+                {{ test?.nome }}
+
+                <md-filled-tonal-button *ngIf="test.elementos.length > 0" class="search-button"
+                    (click)="mostrarElementos($event, test)">
+
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        Ver elementos
+                    </div>
+
+                </md-filled-tonal-button>
+
+                <div slot="supporting-text">Resultado: {{ test.resultado }}</div>
+
+            </md-list-item>
+        </md-list>
+
+
+        <md-list *ngIf="filtrada">
+            <md-list-item class="item" type="button" *ngFor="let test of listaFiltrada">
+                {{ test?.nome }}
+
+                <md-filled-tonal-button *ngIf="test.elementos.length > 0" class="search-button"
+                    (click)="mostrarElementos($event, test)">
+
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        Ver elementos
+                    </div>
+
+                </md-filled-tonal-button>
+
+                <div slot="supporting-text">Resultado: {{ test.resultado }}</div>
+
+            </md-list-item>
+        </md-list>
+
+    </md-list>
+</div>
+
+<md-dialog id="my-dialog" class="dialog">
+    <div slot="headline"> Elementos avaliados em {{currentTest?.nome}} </div>
+    <form id="form" slot="content" method="dialog">
+        <md-list-item class="item-dialog" *ngFor="let elem of currentElementsList">
+            <p>
+                <strong>Elemento:</strong> {{ elem?.elemento }}
+            </p>
+            <p>
+                <strong>Resultado:</strong> {{ elem?.resultado }}
+            </p>
+        </md-list-item>
+    </form>
+    <div slot="actions">
+        <md-text-button class="option" form="form" value="cancel" (click)="cancel()"> Voltar </md-text-button>
+    </div>
+</md-dialog>

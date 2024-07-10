@@ -1,0 +1,156 @@
+/* HeroDetailComponent's private CSS styles */
+
+h2 {
+  margin-top: 2%;
+  margin-bottom: 3%;
+  font-size: xx-large;
+  font-weight: 300;
+  width: 100%;
+  text-align: center;
+}
+
+.back {
+  --md-fab-container-color: #a2cff2;
+  margin-top: -11%;
+  margin-left: 3%;
+  --md-fab-container-height: 60px;
+  --md-fab-container-width: 60px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.urlDetails {
+  margin-top: 8%;
+  margin-left: 2%;
+  width: 35%;
+}
+
+.pages {
+  padding: 12px 16px;
+}
+
+.page {
+  background-color:rgb(235, 235, 235);
+  margin-left: 1.5%;
+  margin-bottom: 1.5%;
+  width:97%;
+  border-radius: 8px;
+  outline: 1px solid var(--md-sys-color-outline);
+  align-items: center;
+  text-align: left;
+}
+
+.page.selected {
+  background-color: rgb(158, 207, 255);
+}
+
+.pageUrl {
+  font-weight: bold;
+  color: #38464a;
+}
+
+.info {
+  font-weight: 500;
+}
+
+.detalhes {
+  margin-left:2%;
+  margin-top: 2%;
+  margin-bottom: 1.4%;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  justify-content: center;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.deletePages {
+  --md-sys-color-on-secondary-container: #364e52;
+  margin-right: 1%;
+  width: 60%;
+}
+
+.deletePages:hover {
+  --md-sys-color-secondary-container: rgb(255, 119, 119);
+}
+
+.deleteWebsite {
+  width: 95%;
+}
+
+.deleteWebsite:hover {
+  --md-sys-color-secondary-container: rgb(255, 119, 119);
+}
+
+.addSection {
+  margin: 5%;
+}
+
+.inputTitle {
+  margin-bottom: 3%;
+  font-size: xx-large;
+  width: 50%;
+  font-weight: 300;
+  margin-left: 80px;
+}
+
+.urlInput {
+  width: 400px;
+  height: 70px;
+  padding: 10px;
+  border-radius: 50px;
+  font-size: 16px;
+  margin-top: 1.45%;
+  --md-outlined-text-field-container-shape: 35px;
+  --md-outlined-text-field-focus-outline-color: #091295;
+  --md-outlined-text-field-focus-label-text-color: #091295;
+}
+
+.confirm {
+  position: absolute;
+  margin-top: 1.2%;
+  margin-left: 0.5%;
+  --md-fab-branded-label-text-weight: 400;
+  --md-fab-branded-container-color: #b2edf6;
+  --md-fab-branded-container-shape: 36px
+}
+
+.error-message {
+  margin-left: 20%;
+  margin-top: 1%;
+}
+
+.acessibilidade {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+
+.gerarRelatorio {
+  width: 90%;
+  margin-bottom: 2%;
+}

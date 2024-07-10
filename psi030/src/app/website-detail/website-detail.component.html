@@ -1,0 +1,184 @@
+<h2 for="urlInput"> Detalhes Website</h2>
+
+<div class="parametros">
+  <div id="testDiv" class="back">
+    <md-fab (click)="goBack()" style="margin-top: 23px;">
+      <md-icon slot="icon" style="font-size: xx-large;"> < </md-icon>
+    </md-fab>
+  </div>
+</div>
+
+<div class="container">
+  <div class="urlDetails">
+    <md-list>
+
+      <md-list-item>
+        <strong>URL: </strong> {{ displayUrl() }}
+      </md-list-item>
+
+      <md-divider></md-divider>
+
+      <md-list-item>
+        <strong>Data de Registo: </strong>{{ displayDataRegisto() }}
+      </md-list-item>
+
+      <md-list-item>
+        <strong>Data da Última Avaliação: </strong> {{ displayDataAval() }}
+      </md-list-item>
+
+      <div class="pages">
+        <strong> Páginas: </strong>
+          <md-list class="pagesList">
+            <md-list-item type="button" *ngFor="let page of website?.pages" class="page"
+              [class.selected]="isSelected(page)" (click)="toggleSelection(page)">
+
+              <label class="pageUrl" for="page-url">{{ page.url }}</label><br>
+              <label class="info" for="page-date-reg">
+                Data da Última Avaliação: {{ formataData(page.dataAval) }}
+              </label><br>
+
+              <label class="info" for="page-estado">
+                Estado da Página: {{ getEstado(page.estado) }}                
+              </label><br>
+
+              <label class="info">
+                <md-filled-tonal-button *ngIf="page.evaluation" class="detalhes" 
+                  [routerLink]="['/evaluation', page.url]"> 
+                  Ver detalhes
+                </md-filled-tonal-button>
+              </label>
+
+            </md-list-item>
+          </md-list>
+      </div>
+
+      <div class="options">
+        <div class="button-container" *ngIf="paginasSelecionadas.length > 0">
+          <md-filled-tonal-button class="deletePages" (click)="apagarSelecionadas()">Apagar
+            Página(s)</md-filled-tonal-button>
+        </div>
+
+        <div class="button-container">
+          <md-filled-tonal-button class="deleteWebsite" (click)="deleteWebsite()">Apagar
+            Website</md-filled-tonal-button>
+        </div>
+
+      </div>
+
+
+
+    </md-list>
+  </div>
+
+
+
+  <div class="addSection">
+    <div>
+      <label class="inputTitle" for="urlInput"> Adicionar Página</label>
+    </div>
+
+    <div>
+      <md-outlined-text-field class="urlInput" name="url" label="URL" supporting-text="https://www.example.com" #pageUrl
+        (keyup)="onUrlChange($event)" (keyup.enter)="add(pageUrl.value)">
+      </md-outlined-text-field>
+
+      <md-branded-fab class="confirm" label="Adicionar" (click)="add(pageUrl.value);">
+        <svg slot="icon" viewBox="0 0 36 36">
+          <path fill="#34A853" d="M16 16v14h4V20z"></path>
+          <path fill="#4285F4" d="M30 16H20l-4 4h14z"></path>
+          <path fill="#FBBC05" d="M6 16v4h10l4-4z"></path>
+          <path fill="#EA4335" d="M20 16V6h-4v14z"></path>
+          <path fill="none" d="M0 0h36v36H0z"></path>
+        </svg>
+      </md-branded-fab>
+
+      <div class="error-message" *ngIf="!sameDomain">
+        <span class="error-message">❗Error: Adicione página pertencente ao domínio</span>
+      </div>
+      
+      <div class="error-message" *ngIf="!addResult">
+        <span class="error-message">❗Error: Adicione o URL seguindo o formato indicado</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="acessibilidade" *ngIf="totalPagesEvaluated !== 0">
+  <md-list>
+
+    <div>
+      <md-list-item class="item">
+        <strong>Total de páginas sem erros de acessibilidade:</strong> {{ (totalPagesEvaluated - pagesWithErrors) }} ({{
+          ((totalPagesEvaluated - pagesWithErrors) / totalPagesEvaluated * 100).toFixed(2) }}%)
+      </md-list-item>
+        
+      <md-list-item class="item">
+        <strong>Total de páginas com pelo menos um erro de acessibilidade:</strong> {{ pagesWithErrors }} ({{
+          (pagesWithErrors / totalPagesEvaluated * 100).toFixed(2) }}%)
+      </md-list-item>
+          
+      <md-list-item class="item">
+        <strong>Total de páginas com pelo menos um erro de acessibilidade de nível A:</strong> {{ pagesWithLevelAErrors }}
+        ({{ (pagesWithLevelAErrors / totalPagesEvaluated * 100).toFixed(2) }}%)
+      </md-list-item>
+          
+      <md-list-item class="item">
+        <strong>Total de páginas com pelo menos um erro de acessibilidade de nível AA:</strong> {{ pagesWithLevelAaErrors
+        }} ({{ (pagesWithLevelAaErrors / totalPagesEvaluated * 100).toFixed(2) }}%)
+      </md-list-item>
+      
+      <md-list-item class="item">
+        <strong>Total de páginas com pelo menos um erro de acessibilidade de nível AAA:</strong> {{
+          pagesWithLevelAaaErrors }} ({{ (pagesWithLevelAaaErrors / totalPagesEvaluated * 100).toFixed(2) }}%)
+      </md-list-item>
+            
+      <md-list-item class="item">
+        <strong>10 erros de acessibilidade mais comuns:</strong>
+        <ul>
+          <li *ngFor="let error of commonAccessibilityErrors">{{ error }}</li>
+        </ul>
+      </md-list-item>
+    </div>
+            
+    <div class="options">
+      <md-filled-tonal-button class="gerarRelatorio" (click)="gerarRelatorioHTML()"> Gerar Relatório HTML </md-filled-tonal-button>
+      <md-filled-tonal-button class="gerarRelatorio" (click)="gerarRelatorioPDF()"> Gerar Relatório PDF </md-filled-tonal-button>          
+    </div>
+      
+  </md-list>
+</div>
+
+<div id="relatorio" hidden>
+  <p> <strong>Website: </strong> {{ website?.url }}
+  </p>
+
+  <p> <strong>Data da última avaliação: </strong> {{ displayDataAval() }}
+  </p>
+  <br>
+
+  <p> Total de páginas <strong>sem erros</strong> de acessibilidade: {{ (totalPagesEvaluated - pagesWithErrors) }}
+    ({{ ((totalPagesEvaluated - pagesWithErrors) / totalPagesEvaluated * 100).toFixed(2) }}%)
+  </p>
+
+  <p> Total de páginas com <strong>pelo menos um erro</strong> de acessibilidade: {{ pagesWithErrors }}
+    ({{ (pagesWithErrors / totalPagesEvaluated * 100).toFixed(2) }}%)
+  </p>
+
+  <p> Total de páginas com <strong>pelo menos um erro</strong> de acessibilidade de <strong>nível A</strong>: {{ pagesWithLevelAErrors }}
+    ({{ (pagesWithLevelAErrors / totalPagesEvaluated * 100).toFixed(2) }}%)
+  </p>
+
+  <p> Total de páginas com <strong>pelo menos um erro</strong> de acessibilidade de <strong>nível AA</strong>: {{ pagesWithLevelAaErrors }}
+    ({{ (pagesWithLevelAaErrors / totalPagesEvaluated * 100).toFixed(2) }}%)
+  </p>
+
+  <p>Total de páginas com <strong>pelo menos um erro</strong> de acessibilidade de <strong>nível AAA</strong>: {{ pagesWithLevelAaaErrors }}
+    ({{ (pagesWithLevelAaaErrors / totalPagesEvaluated * 100).toFixed(2) }}%)
+  </p>
+
+  <p><strong>10 erros de acessibilidade mais comuns:</strong></p>
+  <ul>
+    <li *ngFor="let error of commonAccessibilityErrors">{{ error }}</li>
+  </ul>
+</div>
