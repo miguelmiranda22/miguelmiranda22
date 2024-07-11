@@ -40,7 +40,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
 const dev_db_url =
-/*local*/  "mongodb://localhost:27017/projeto-psi";
+/*local*/  "mongodb+srv://miguelmotamiranda:tnQexIH27fMKUIBN@cluster0.4jfdqdl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 /*app-server*/  //"mongodb://psi030:psi030@localhost:27017/psi030?retryWrites=true&authSource=psi030";
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
 

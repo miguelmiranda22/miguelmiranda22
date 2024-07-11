@@ -19,7 +19,7 @@ export class WebsiteService {
     throw new Error('Method not implemented.');
   }
 
-  private websitesUrl = 'http://localhost:3080/';  // URL to web api
+  private websitesUrl = 'https://miguelmiranda22.onrender.com';  // URL to web api
   //private websitesUrl = 'http://appserver.alunos.di.fc.ul.pt:3080/';  // URL to web api
 
 
